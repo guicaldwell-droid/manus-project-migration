@@ -31,4 +31,4 @@ use the editor.
 
 ## Padrinhos site
 - The landing page is the migrated Manus static site: markup in src/padrinhos/page.html (rendered raw), styles in src/padrinhos/padrinhos.css, scroll animation in src/padrinhos/burger-scrub.ts. Why: keeps the approved design identical to the source.
-- The 82 animation frames live in public/frames/frame-NNN.webp. Why: loaded by index pattern at runtime.
+- The burger animation is one all-keyframe MP4 (Lovable asset, pink #ED72A8 background) scrubbed via anime.js onScroll setting video.currentTime. Why: smooth bidirectional seeking and a background that matches the section.
