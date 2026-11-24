@@ -1,0 +1,6 @@
+[
+{"capability":"code","source":"static index.html/styles.css/app.js","outcome":"migrate","status":"done","next_action":"none"},
+{"capability":"assets","source":"82 frames + avatar","outcome":"migrate","status":"done","next_action":"none"},
+{"capability":"schema/records/auth/storage/schedules/endpoints/secrets","source":"DATABASE.md: none exist","outcome":"not applicable","status":"verified","next_action":"none"},
+{"capability":"external links (Anota AI, Instagram, Maps)","source":"links","outcome":"preserve","status":"done","next_action":"none"}
+]

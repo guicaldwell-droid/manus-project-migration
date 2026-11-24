@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Padrinhos site
+- The landing page is the migrated Manus static site: markup in src/padrinhos/page.html (rendered raw), styles in src/padrinhos/padrinhos.css, scroll animation in src/padrinhos/burger-scrub.ts. Why: keeps the approved design identical to the source.
+- The 82 animation frames live in public/frames/frame-NNN.webp. Why: loaded by index pattern at runtime.
