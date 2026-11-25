@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "theme-color", content: "#f3a1c2" },
     ],
     links: [
+      { rel: "icon", type: "image/webp", href: "/padrinhos-avatar.webp" },
+      { rel: "apple-touch-icon", href: "/padrinhos-avatar.webp" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700;800&display=swap" },

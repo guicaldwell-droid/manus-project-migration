@@ -182,6 +182,8 @@ const fullHtml = `<!DOCTYPE html>
   <meta property="og:title" content="Padrinhos — Smash com crosta e personalidade" />
   <meta property="og:description" content="Padrinhos Smash Original — smash com crosta e personalidade em Brasília." />
   <meta name="theme-color" content="#f3a1c2" />
+  <link rel="icon" type="image/webp" href="./padrinhos-avatar.webp" />
+  <link rel="apple-touch-icon" href="./padrinhos-avatar.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700;800&display=swap" />
