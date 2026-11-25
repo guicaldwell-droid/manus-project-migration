@@ -12,27 +12,22 @@
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">BRASÍLIA · DESDE 2021</p>
-          <h1>SMASH.<br /><span>COM CROSTA.</span><br />SEM PAPO.</h1>
-          <p class="hero-sub">Desinfluencer do hambúrguer.<br />SMASH COM CROSTA E PERSONALIDADE.</p>
-          <a class="button" href="#cardapio">Ver o cardápio</a>
-          <span class="hero-note">Role para ver a montagem</span>
-        </div>
-        <div class="hero-burger" aria-label="Animação do hambúrguer controlada pela rolagem">
-          <video class="burger-video" muted playsinline preload="auto" disablepictureinpicture aria-label="Hambúrguer em uma sequência sincronizada com a rolagem"></video>
-          <div class="frame-status" aria-hidden="true"><span id="frame-number">01</span><span class="frame-line"></span><span>82 FRAMES</span></div>
-        </div>
-        <div class="hero-side">A CROSTA<br />É O COMEÇO.</div>
-      </section>
-
-      <section class="scrub-track" id="scrub-track" aria-label="Montagem visual do hambúrguer">
-        <div class="scrub-sticky">
-          <div class="scrub-heading"><span>OLHO NO SMASH</span><span>01 — 82</span></div>
-          <video class="burger-video" muted playsinline preload="auto" disablepictureinpicture aria-label="Hambúrguer se abrindo conforme a rolagem"></video>
-          <p class="scrub-caption">Uma ideia, quadro a quadro.</p>
-        </div>
+      <section class="hero-scroll-wrapper" id="hero-scroll-wrapper">
+        <section class="hero" id="hero-section">
+          <div class="hero-copy">
+            <p class="eyebrow">BRASÍLIA · DESDE 2021</p>
+            <h1>SMASH.<br /><span>COM CROSTA.</span><br />SEM PAPO.</h1>
+            <p class="hero-sub">Desinfluencer do hambúrguer.<br />SMASH COM CROSTA E PERSONALIDADE.</p>
+            <a class="button" href="#cardapio">Ver o cardápio</a>
+            <span class="hero-note">Role para ver a montagem</span>
+          </div>
+          <div class="hero-burger" aria-label="Animação do hambúrguer controlada pela rolagem">
+            <canvas id="burger-canvas" class="burger-canvas" width="1920" height="1080" aria-label="Animação do hambúrguer quadro a quadro"></canvas>
+            <video class="burger-video-mobile" muted playsinline preload="auto" disablepictureinpicture aria-label="Animação do hambúrguer"></video>
+            <div class="frame-status" aria-hidden="true"><span id="frame-number">01</span><span class="frame-line"></span><span>53 FRAMES</span></div>
+          </div>
+          <div class="hero-side">A CROSTA<br />É O COMEÇO.</div>
+        </section>
       </section>
 
       <div class="checker" aria-hidden="true"></div>

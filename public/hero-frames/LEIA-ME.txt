@@ -1,0 +1,5 @@
+PADRINHOS — SEQUÊNCIA PNG PARA ANIMAÇÃO DA HERO
+
+53 quadros PNG numerados, em 1920 x 1080, 24 fps, extraídos do clipe gerado e recortados para o rosa da marca #ED72A8. O movimento vai do hambúrguer montado à composição aberta em camadas. O fundo é chapado, não transparente.
+
+Use a sequência como sprite/quadros controlados pelo scroll ou pelo After Effects. O clipe MP4 correspondente está separado.
