@@ -55,7 +55,9 @@ const scriptContent = `
     var image = images[index];
     if (!image || states[index] !== 2 || isCleanedUp) return false;
     if (drawnFrame !== index) {
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.fillStyle = "#ed72a8";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 1);
       drawnFrame = index;
     }
     return true;

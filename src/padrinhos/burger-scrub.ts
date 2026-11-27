@@ -27,7 +27,10 @@ export function startBurgerScrub(): () => void {
     const image = images[index];
     if (!image || states[index] !== 2 || isCleanedUp) return false;
     if (drawnFrame !== index) {
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      // Leave a one-pixel pink safety edge above the bun without rescaling the frame.
+      context.fillStyle = "#ed72a8";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 1);
       drawnFrame = index;
     }
     return true;
