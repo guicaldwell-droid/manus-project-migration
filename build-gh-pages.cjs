@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
@@ -27,7 +28,10 @@ bodyHtml = bodyHtml.replace(/"\/padrinhos-avatar\.webp"/g, '"./padrinhos-avatar.
 
 const padrinhosCss = fs.readFileSync('src/padrinhos/padrinhos.css', 'utf8');
 const overridesCss = fs.readFileSync('src/padrinhos/padrinhos-overrides.css', 'utf8');
-fs.writeFileSync(path.join(outDir, 'padrinhos.css'), `${padrinhosCss}\n${overridesCss}`);
+const cssContent = `${padrinhosCss}\n${overridesCss}`;
+const cssHash = crypto.createHash('sha256').update(cssContent).digest('hex').slice(0, 8);
+const cssFileName = `padrinhos-${cssHash}.css`;
+fs.writeFileSync(path.join(outDir, cssFileName), cssContent);
 
 const scriptContent = `
 (function() {
@@ -148,13 +152,13 @@ const fullHtml = `<!DOCTYPE html>
   <meta name="description" content="Padrinhos Smash Original — smash com crosta e personalidade em Brasília." />
   <meta property="og:title" content="Padrinhos — Smash com crosta e personalidade" />
   <meta property="og:description" content="Padrinhos Smash Original — smash com crosta e personalidade em Brasília." />
-  <meta name="theme-color" content="#ED72A8" />
+  <meta name="theme-color" content="#F6F0E8" />
   <link rel="icon" type="image/webp" href="./padrinhos-avatar.webp" />
   <link rel="apple-touch-icon" href="./padrinhos-avatar.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700;800&display=swap" />
-  <link rel="stylesheet" href="./padrinhos.css" />
+  <link rel="stylesheet" href="./${cssFileName}" />
 </head>
 <body>
 ${bodyHtml}
