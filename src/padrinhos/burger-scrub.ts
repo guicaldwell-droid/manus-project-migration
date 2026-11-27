@@ -1,5 +1,5 @@
 // Scroll-linked hero animation rendered from the extracted/interpolated frame sequence.
-// The 80-frame WebP sequence is 50 fps, retimed to 1.6 s from source frame 27 (16 px of bun clearance).
+// The 80-frame WebP sequence is 50 fps and ends at the source frame at ~1.58 s.
 const TOTAL_FRAMES = 80;
 const PLAYBACK_DURATION_MS = 1600;
 
@@ -27,10 +27,7 @@ export function startBurgerScrub(): () => void {
     const image = images[index];
     if (!image || states[index] !== 2 || isCleanedUp) return false;
     if (drawnFrame !== index) {
-      // Leave a one-pixel pink safety edge above the bun without rescaling the frame.
-      context.fillStyle = "#ed72a8";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, 0, 1);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
       drawnFrame = index;
     }
     return true;

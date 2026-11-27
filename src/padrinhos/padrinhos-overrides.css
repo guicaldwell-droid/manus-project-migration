@@ -1,5 +1,18 @@
-.hero-scroll-wrapper {
-  background: var(--cream);
+/* Match the approved #ED72A8 reference across the page backdrop. */
+html,
+body,
+.topbar,
+.hero-scroll-wrapper,
+.hero,
+.manifesto,
+.menu,
+.locations,
+footer {
+  background: #ed72a8;
+}
+
+footer {
+  color: var(--ink);
 }
 
 .hero {
