@@ -1,189 +1,89 @@
 // Scroll-linked burger animation in the hero section.
-// Desktop: 53-frame PNG sequence rendered on <canvas> via requestAnimationFrame on native scroll.
-// Mobile: Autoplay native <video> once, no scroll-jacking.
-// Accessibility: prefers-reduced-motion displays static initial frame and leaves scroll untouched.
-
-const TOTAL_FRAMES = 53;
-const VIDEO_SRC = "/padrinhos-hamburguer-hero-rosa.mp4";
-
-function getFramePath(index: number): string {
-  const num = String(index + 1).padStart(4, "0");
-  return `/hero-frames/frames/padrinhos_${num}.png`;
-}
+// Desktop scrubs the generated MP4 with native scroll; mobile plays it once.
+// With reduced motion enabled, the video remains on its closed first frame.
 
 export function startBurgerScrub(): () => void {
-  const canvas = document.getElementById("burger-canvas") as HTMLCanvasElement | null;
-  const mobileVideo = document.querySelector<HTMLVideoElement>("video.burger-video-mobile");
-  const counter = document.getElementById("frame-number");
+  const video = document.querySelector<HTMLVideoElement>("video.burger-video");
   const scrollWrapper = document.getElementById("hero-scroll-wrapper");
   const heroSection = document.getElementById("hero-section");
 
-  if (!canvas || !scrollWrapper || !heroSection) return () => {};
-
-  const ctx = canvas.getContext("2d", { alpha: false });
-  let isCleanedUp = false;
-  let rafId = 0;
-  let currentRenderedIndex = -1;
+  if (!video || !scrollWrapper || !heroSection) return () => {};
 
   const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isMobile = window.matchMedia("(max-width: 760px)").matches;
+  let isCleanedUp = false;
+  let rafId = 0;
 
-  // Preload frames cache
-  const images: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null);
-  let initialFrameLoaded = false;
+  video.muted = true;
+  video.playsInline = true;
+  video.loop = false;
+  video.preload = "auto";
 
-  const renderFrame = (index: number) => {
-    if (!ctx) return;
-    const clampedIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, index));
-    const img = images[clampedIndex];
-
-    if (img && img.complete && img.naturalWidth > 0) {
-      if (currentRenderedIndex !== clampedIndex) {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        currentRenderedIndex = clampedIndex;
-        if (counter) {
-          counter.textContent = String(clampedIndex + 1).padStart(2, "0");
-        }
-      }
-    } else {
-      // If requested frame isn't loaded yet, try to load it immediately
-      loadSingleFrame(clampedIndex, () => {
-        if (!isCleanedUp && (currentRenderedIndex === -1 || currentRenderedIndex !== clampedIndex)) {
-          ctx.drawImage(images[clampedIndex]!, 0, 0, canvas.width, canvas.height);
-          currentRenderedIndex = clampedIndex;
-          if (counter) {
-            counter.textContent = String(clampedIndex + 1).padStart(2, "0");
-          }
-        }
-      });
-    }
-  };
-
-  function loadSingleFrame(index: number, onLoad?: () => void) {
-    if (images[index]) {
-      if (images[index]!.complete && onLoad) onLoad();
-      return;
-    }
-    const img = new Image();
-    img.src = getFramePath(index);
-    img.onload = () => {
-      images[index] = img;
-      if (onLoad) onLoad();
-    };
-    images[index] = img;
-  }
-
-  // Load first frame immediately to render initial state without black/empty space
-  const firstImg = new Image();
-  firstImg.src = getFramePath(0);
-  firstImg.onload = () => {
-    images[0] = firstImg;
-    initialFrameLoaded = true;
-    if (currentRenderedIndex === -1) {
-      renderFrame(0);
-    }
-  };
-  images[0] = firstImg;
-
-  // Preload rest of frames in background
-  const preloadAll = () => {
-    for (let i = 1; i < TOTAL_FRAMES; i++) {
-      loadSingleFrame(i);
-    }
-  };
-
-  // If user prefers reduced motion
   if (isReducedMotion) {
-    if (mobileVideo) {
-      mobileVideo.style.display = "none";
-    }
-    canvas.style.display = "block";
-    renderFrame(0);
+    video.pause();
     return () => {
       isCleanedUp = true;
     };
   }
 
-  // Mobile mode setup
   if (isMobile) {
-    if (mobileVideo) {
-      mobileVideo.src = VIDEO_SRC;
-      mobileVideo.muted = true;
-      mobileVideo.playsInline = true;
-      mobileVideo.autoplay = true;
-      mobileVideo.loop = false;
-      mobileVideo.style.display = "block";
-      canvas.style.display = "none";
+    const playOnce = () => {
+      if (isCleanedUp) return;
+      const playPromise = video.play();
+      if (playPromise !== undefined) playPromise.catch(() => {});
+    };
 
-      const playPromise = mobileVideo.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // If autoplay fails, fallback to first frame canvas
-          mobileVideo.style.display = "none";
-          canvas.style.display = "block";
-          renderFrame(0);
-        });
-      }
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      playOnce();
+    } else {
+      video.addEventListener("canplay", playOnce, { once: true });
     }
+
     return () => {
       isCleanedUp = true;
-      if (mobileVideo) {
-        mobileVideo.pause();
-        mobileVideo.src = "";
-      }
+      video.removeEventListener("canplay", playOnce);
+      video.pause();
     };
   }
 
-  // Desktop mode setup
-  if (mobileVideo) {
-    mobileVideo.style.display = "none";
-  }
-  canvas.style.display = "block";
-
-  // Request idle or delayed background preload of remaining frames
-  if ("requestIdleCallback" in window) {
-    (window as any).requestIdleCallback(preloadAll);
-  } else {
-    setTimeout(preloadAll, 200);
-  }
+  video.pause();
 
   const updateScrub = () => {
     rafId = 0;
-    if (isCleanedUp) return;
+    if (isCleanedUp || video.readyState < HTMLMediaElement.HAVE_METADATA) return;
 
-    // Calculate scroll progress through hero-scroll-wrapper
-    // The wrapper has height: 200vh (or 100vh + 100vh scroll distance)
     const rect = scrollWrapper.getBoundingClientRect();
     const scrollDistance = rect.height - window.innerHeight;
-
-    if (scrollDistance <= 0) {
-      renderFrame(0);
+    if (scrollDistance <= 0 || !Number.isFinite(video.duration)) {
+      video.currentTime = 0;
       return;
     }
 
-    // How far the top of the wrapper has moved past the viewport top
     const scrolled = -rect.top;
     const progress = Math.max(0, Math.min(1, scrolled / scrollDistance));
+    const targetTime = progress * Math.max(0, video.duration - 0.04);
 
-    const targetFrameIndex = Math.round(progress * (TOTAL_FRAMES - 1));
-    renderFrame(targetFrameIndex);
-  };
-
-  const onScroll = () => {
-    if (!rafId) {
-      rafId = requestAnimationFrame(updateScrub);
+    if (!video.seeking && Math.abs(video.currentTime - targetTime) > 0.04) {
+      video.currentTime = targetTime;
     }
   };
 
+  const onScroll = () => {
+    if (!rafId) rafId = requestAnimationFrame(updateScrub);
+  };
+
+  const onSeeked = () => onScroll();
+  video.addEventListener("loadedmetadata", onScroll);
+  video.addEventListener("seeked", onSeeked);
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-
-  // Initial update
-  updateScrub();
+  onScroll();
 
   return () => {
     isCleanedUp = true;
     if (rafId) cancelAnimationFrame(rafId);
+    video.removeEventListener("loadedmetadata", onScroll);
+    video.removeEventListener("seeked", onSeeked);
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", onScroll);
   };
