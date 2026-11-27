@@ -31,4 +31,4 @@ use the editor.
 
 ## Padrinhos site
 - The landing page is the migrated Manus static site: markup in src/padrinhos/page.html (rendered raw), styles in src/padrinhos/padrinhos.css, scroll animation in src/padrinhos/burger-scrub.ts. Why: keeps the approved design identical to the source.
-- The burger animation uses the first 39 source frames from the Salada Bacon ZIP, motion-interpolated to 80 WebP frames at 50 fps (1.6 s playback). Desktop scrubs the canvas sequence with scroll; mobile plays it once. The processed frame background and all main page sections match #ED72A8.
+- The burger animation uses the first 27 source frames from the Salada Bacon ZIP, motion-interpolated and retimed to 80 WebP frames at 50 fps (1.6 s playback). Frame 27 leaves 16 source pixels above the bun; frame 30 is the first clipped source frame. Desktop scrubs the canvas sequence with scroll; mobile plays it once. The processed frame background and all main page sections match #ED72A8.

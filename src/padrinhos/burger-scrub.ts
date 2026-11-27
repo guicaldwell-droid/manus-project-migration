@@ -1,5 +1,5 @@
 // Scroll-linked hero animation rendered from the extracted/interpolated frame sequence.
-// The 80-frame WebP sequence is 50 fps and ends at the source frame at ~1.58 s.
+// The 80-frame WebP sequence is 50 fps, retimed to 1.6 s from source frame 27 (16 px of bun clearance).
 const TOTAL_FRAMES = 80;
 const PLAYBACK_DURATION_MS = 1600;
 
