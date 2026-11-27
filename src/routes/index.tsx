@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Padrinhos Smash Original — smash com crosta e personalidade em Brasília." },
       { property: "og:title", content: "Padrinhos — Smash com crosta e personalidade" },
       { property: "og:description", content: "Padrinhos Smash Original — smash com crosta e personalidade em Brasília." },
-      { name: "theme-color", content: "#ED72A8" },
+      { name: "theme-color", content: "#F6F0E8" },
     ],
     links: [
       { rel: "icon", type: "image/webp", href: "/padrinhos-avatar.webp" },

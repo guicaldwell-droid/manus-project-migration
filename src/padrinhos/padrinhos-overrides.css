@@ -1,3 +1,7 @@
+.hero-scroll-wrapper {
+  background: var(--cream);
+}
+
 .hero {
   grid-template-columns: 1fr 1fr;
 }
