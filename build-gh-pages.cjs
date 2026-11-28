@@ -54,6 +54,14 @@ const scriptContent = `
   var animationFrameId = 0;
   var isCleanedUp = false;
   var mobilePlaybackStarted = false;
+  var FIRST_ADJUSTED_FRAME_INDEX = 53;
+  var TOP_CLEARANCE_PX = 25;
+  var INTERMEDIATE_TOP_OFFSETS = [6, 9, 15, 17, 22];
+
+  function getFrameTopOffset(index) {
+    if (index < FIRST_ADJUSTED_FRAME_INDEX) return 1;
+    return INTERMEDIATE_TOP_OFFSETS[index - FIRST_ADJUSTED_FRAME_INDEX] || TOP_CLEARANCE_PX;
+  }
 
   function drawFrame(index) {
     var image = images[index];
@@ -61,7 +69,7 @@ const scriptContent = `
     if (drawnFrame !== index) {
       context.fillStyle = "#ed72a8";
       context.fillRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, 0, 1);
+      context.drawImage(image, 0, getFrameTopOffset(index));
       drawnFrame = index;
     }
     return true;

@@ -1,7 +1,15 @@
 // Scroll-linked hero animation rendered from the extracted/interpolated frame sequence.
-// The 80-frame WebP sequence is 50 fps, retimed to 1.6 s from source frame 27 (16 px of bun clearance).
+// The original 80-frame WebP sequence is 50 fps (~1.58 s); only late frames are translated, never rescaled.
 const TOTAL_FRAMES = 80;
 const PLAYBACK_DURATION_MS = 1600;
+const FIRST_ADJUSTED_FRAME_INDEX = 53;
+const TOP_CLEARANCE_PX = 25;
+const INTERMEDIATE_TOP_OFFSETS = [6, 9, 15, 17, 22] as const;
+
+const getFrameTopOffset = (index: number) => {
+  if (index < FIRST_ADJUSTED_FRAME_INDEX) return 1;
+  return INTERMEDIATE_TOP_OFFSETS[index - FIRST_ADJUSTED_FRAME_INDEX] ?? TOP_CLEARANCE_PX;
+};
 
 export function startBurgerScrub(): () => void {
   const canvas = document.getElementById("burger-canvas") as HTMLCanvasElement | null;
@@ -27,10 +35,10 @@ export function startBurgerScrub(): () => void {
     const image = images[index];
     if (!image || states[index] !== 2 || isCleanedUp) return false;
     if (drawnFrame !== index) {
-      // Leave a one-pixel pink safety edge above the bun without rescaling the frame.
+      // Keep the existing 1 px offset, then reserve 25 px above the bun without rescaling.
       context.fillStyle = "#ed72a8";
       context.fillRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, 0, 1);
+      context.drawImage(image, 0, getFrameTopOffset(index));
       drawnFrame = index;
     }
     return true;
